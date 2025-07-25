@@ -3,7 +3,10 @@
     import Chart from 'chart.js/auto'
     import annotationPlugin from 'chartjs-plugin-annotation'
     import datalabels from 'chartjs-plugin-datalabels'
+import { registerFont } from 'canvas'
 
+// โหลดฟอนต์ไทย เช่น NotoSansThai
+registerFont('./fonts/NotoSansThai-Regular.ttf', { family: 'NotoSansThai' })
     // 🔥 สมัคร plugin
     Chart.register(annotationPlugin, datalabels)
 
@@ -58,7 +61,13 @@
       options: {
         responsive: false,
         plugins: {
-          datalabels: {} // บังคับโหลด
+          datalabels: {
+            font: {
+              family: 'NotoSansThai',
+              size: 14,
+              weight: 'bold'
+            }
+          } // บังคับโหลด
         }
       }
     }
