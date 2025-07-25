@@ -1,4 +1,4 @@
-    import express from 'express'
+={})    import express from 'express'
     import { ChartJSNodeCanvas } from 'chartjs-node-canvas'
     import Chart from 'chart.js/auto'
     import annotationPlugin from 'chartjs-plugin-annotation'
@@ -6,7 +6,7 @@
 import { registerFont } from 'canvas'
 
 // โหลดฟอนต์ไทย เช่น NotoSansThai
-registerFont('./fonts/NotoSansThai-Regular.ttf', { family: 'NotoSansThai' })
+registerFont('./fonts/Noto-Sans-Thai-Regular.ttf', { family: 'NotoSansThai' })
     // 🔥 สมัคร plugin
     Chart.register(annotationPlugin, datalabels)
 
@@ -71,7 +71,9 @@ registerFont('./fonts/NotoSansThai-Regular.ttf', { family: 'NotoSansThai' })
         }
       }
     }
-
+    app.get('/', (req, res) => {
+      res.send('hello‘ Portsnap')
+    })
     // 🛠️ สร้าง API Endpoint
     app.get('/chart', async (req, res) => {
       try {
