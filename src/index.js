@@ -20,7 +20,25 @@ import express from 'express'
         ChartJS.register(annotationPlugin, datalabels)
       }
     })
-
+const title = {
+  display: true,
+  text: 'chart',
+  font: { size: 20, weight: 'bold' }
+}
+const target =  {
+    type: "line",
+    yMin: 180,
+    yMax: 180,
+    borderColor: "red",
+    borderWidth: 2,
+    label: {
+      display: true,
+      content: "Target",
+      position: "end",
+      backgroundColor: rgba(255,99,132,0.7),
+      color: "white"
+        }
+      }
 const annotation = {
   type: 'box',
   backgroundColor: 'transparent',
@@ -71,6 +89,7 @@ const annotation = {
         }]
       },
       options: {
+        legend: { display: false },
         scales: {
           x: {
             grid: {
@@ -80,6 +99,7 @@ const annotation = {
             },
         responsive: false,
         plugins: {
+          title,
           datalabels: {
             font: {
               family: 'sans-serif',
@@ -89,7 +109,7 @@ const annotation = {
           },
           annotation: {
             annotations: {
-           //   annotation
+           target
             }
           }
         }
