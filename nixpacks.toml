@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ["nodejs", "fontconfig"]
-
-[phases.build]
-cmds = ["npm install"]
-
-[phases.start]
-cmd = "npm src/index.js"
