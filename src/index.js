@@ -21,20 +21,21 @@ import express from 'express'
       }
     })
 
-const annotationNow = {
-  type: 'line',
-  borderColor: 'red',
-  borderWidth: 2,
+const annotation = {
+  type: 'box',
+  backgroundColor: 'transparent',
+  borderWidth: 0,
   label: {
-    content: 'Now',
-    enabled: true,
-    position: 'bottom',
+    drawTime: 'afterDatasetsDraw',
+    display: true,
+    color: 'rgba(208, 208, 208, 0.2)',
+    content: 'PORTSNAP',
+    font: {
+      size: (ctx) => ctx.chart.chartArea.height / 1.5
     },
-  scaleID: 'x',
-  value: 'October',
-  borderDash: [5, 5],
-  
-}
+    position: 'center'
+  }
+};
     // 📊 config กราฟ
     const chartConfig = {
       type: 'line',
@@ -70,6 +71,13 @@ const annotationNow = {
         }]
       },
       options: {
+        scales: {
+          x: {
+            grid: {
+              display: false
+                }
+              }
+            },
         responsive: false,
         plugins: {
           datalabels: {
@@ -78,7 +86,12 @@ const annotationNow = {
               size: 14,
               weight: 'bold'
             }
-          }, // บังคับโหลด
+          },
+          annotation: {
+            annotations: {
+              annotation
+            }
+          }
         }
       }
     }
