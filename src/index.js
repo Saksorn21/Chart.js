@@ -1,12 +1,9 @@
-import { createCanvas } from "canvas";
-import { Chart, registerables } from "chart.js";
-import annotationPlugin from "chartjs-plugin-annotation";
-import datalabels from "chartjs-plugin-datalabels";
 import express from "express"
+import generateChart from './chart/generateChart.js'
 const app = express()
 const port = process.env.PORT || 3000
 // Register all necessary components
-Chart.register(...registerables, annotationPlugin, datalabels);
+
 const title = {
   display: true,
   text: 'nvda',
@@ -42,106 +39,95 @@ const name = {
     position: 'center'
   }
 };
-async function generateChartImage() {
-  const width = 800;
-  const height = 400;
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext("2d");
-
-  const chartConfig = {
-    type: "line",
-    data: {
-      labels: ['June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      datasets: [{
-        label: 'Buy Signal',
-        data: [
-          { x: 'June', y: null },
-          { x: 'July', y: null },
-          { x: 'August', y: null },
-          { x: 'September', y: 50 },
-          { x: 'October', y: null },
-          { x: 'November', y: null },
-          { x: 'December', y: 70, label: 'Hold: 70' }
-        ],
-        borderColor: 'green',
-        borderWidth: 3,
-        spanGaps: true,
-        pointRadius: 0,
-        fill: false,
-        datalabels: {
-          display: (context) => {
-            const index = context.dataIndex;
-            const value = context.dataset.data[index];
-            const min = Math.min.apply(null, context.dataset.data);
-            const max = Math.max.apply(null, context.dataset.data);
-            return (
-              index == 0 ||
-              index == context.dataset.data.length - 1 ||
-              value == min ||
-              value == max
-            );
-          },
-          formatter: value => value.label || '',
-          align: 'top',
-          backgroundColor: 'black',
-          borderRadius: 4,
-          color: 'white',
-          font: { weight: 'bold', size: 12 }
+const chartConfig = {
+  type: "line",
+  data: {
+    labels: ['June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    datasets: [{
+      label: 'Buy Signal',
+      data: [
+        { x: 'June', y: null },
+        { x: 'July', y: null },
+        { x: 'August', y: null },
+        { x: 'September', y: 50 },
+        { x: 'October', y: null },
+        { x: 'November', y: null },
+        { x: 'December', y: 70, label: 'Hold: 70' }
+      ],
+      borderColor: 'green',
+      borderWidth: 3,
+      spanGaps: true,
+      pointRadius: 0,
+      fill: false,
+      datalabels: {
+        display: (context) => {
+          const index = context.dataIndex;
+          const value = context.dataset.data[index];
+          const min = Math.min.apply(null, context.dataset.data);
+          const max = Math.max.apply(null, context.dataset.data);
+          return (
+            index == 0 ||
+            index == context.dataset.data.length - 1 ||
+            value == min ||
+            value == max
+          );
+        },
+        formatter: value => value.label || '',
+        align: 'top',
+        backgroundColor: 'black',
+        borderRadius: 4,
+        color: 'white',
+        font: { weight: 'bold', size: 12 }
+      }
+    }]
+  },
+  options: {
+    // ... your options, including plugins.annotation and datalabels
+      scales: {
+        x: {
+          type: 'category',  // 🟢 ต้องใส่ type ด้วย
+          grid: { display: false }
+        },
+        y: {
+          type: 'linear',  // 🟢 ต้องมีชัดเจน
+          grid: { display: true }
         }
-      }]
-    },
-    options: {
-      // ... your options, including plugins.annotation and datalabels
-        scales: {
-          x: {
-            type: 'category',  // 🟢 ต้องใส่ type ด้วย
-            grid: { display: false }
-          },
-          y: {
-            type: 'linear',  // 🟢 ต้องมีชัดเจน
-            grid: { display: true }
-          }
-        },
-        plugins: {
-          title,
-          legend: { display: false },
-        annotation: {
-          annotations: {
-            targetLine: {
-              type: "line",
-              scaleID: "x",
-              value: "November",
-              borderColor: "red",
-              borderWidth: 2,
-              borderCapStyle: "butt",
-              label: {
-                display: true,
-                content: "Target",
-                position: "end",
-                backgroundColor: "rgba(255,99,132,0.7)",
-                color: "white",
-              },
+      },
+      plugins: {
+        title,
+        legend: { display: false },
+      annotation: {
+        annotations: {
+          targetLine: {
+            type: "line",
+            scaleID: "x",
+            value: "November",
+            borderColor: "red",
+            borderWidth: 2,
+            borderCapStyle: "butt",
+            label: {
+              display: true,
+              content: "Target",
+              position: "end",
+              backgroundColor: "rgba(255,99,132,0.7)",
+              color: "white",
             },
-            name
           },
-        },
-        datalabels: {
-          /* ... */
+          name
         },
       },
+      datalabels: {
+        /* ... */
+      },
     },
-  };
+  },
+};
 
-  new Chart(ctx, chartConfig); // สร้าง Chart ลงบน context โดยตรง
-
-  // คืนค่า Buffer ของรูปภาพ
-  return canvas.toBuffer("image/png");
-}
 
 //ใน Express route ของคุณ:
 app.get("/test/chart", async (req, res) => {
   try {
-    const imageBuffer = await generateChartImage();
+    const imageBuffer = await generateChart(chartConfig);
     res.set("Content-Type", "image/png");
     res.send(imageBuffer);
   } catch (err) {
