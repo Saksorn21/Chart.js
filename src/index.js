@@ -3,12 +3,7 @@ import express from 'express'
     import Chart from 'chart.js/auto'
     import annotationPlugin from 'chartjs-plugin-annotation'
     import datalabels from 'chartjs-plugin-datalabels'
-import { registerFont } from 'canvas'
 
-// โหลดฟอนต์ไทย เช่น NotoSansThai
-registerFont('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', {
-  family: 'DejaVuSans'
-})
     // 🔥 สมัคร plugin
     Chart.register(annotationPlugin, datalabels)
 
