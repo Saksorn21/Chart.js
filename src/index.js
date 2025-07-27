@@ -6,7 +6,9 @@ import express from 'express'
 import { registerFont } from 'canvas'
 
 // โหลดฟอนต์ไทย เช่น NotoSansThai
-registerFont('./fonts/Noto-Sans-Thai-Regular.ttf', { family: 'NotoSansThai' })
+registerFont('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', {
+  family: 'DejaVuSans'
+})
     // 🔥 สมัคร plugin
     Chart.register(annotationPlugin, datalabels)
 
@@ -63,7 +65,7 @@ registerFont('./fonts/Noto-Sans-Thai-Regular.ttf', { family: 'NotoSansThai' })
         plugins: {
           datalabels: {
             font: {
-              family: 'NotoSansThai',
+              family: 'sans-serif',
               size: 14,
               weight: 'bold'
             }
