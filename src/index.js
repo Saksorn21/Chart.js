@@ -79,11 +79,6 @@ const annotationNow = {
               weight: 'bold'
             }
           }, // บังคับโหลด
-          annotation:{
-            annotations: {
-              annotationNow
-            }
-          }
         }
       }
     }
