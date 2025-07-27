@@ -26,6 +26,20 @@ registerFont('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', {
       }
     })
 
+const annotationNow = {
+  type: 'line',
+  borderColor: 'red',
+  borderWidth: 2,
+  label: {
+    content: 'Now',
+    enabled: true,
+    position: 'bottom',
+    },
+  scaleID: 'x',
+  value: 'October',
+  borderDash: [5, 5],
+  
+}
     // 📊 config กราฟ
     const chartConfig = {
       type: 'line',
@@ -69,7 +83,12 @@ registerFont('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', {
               size: 14,
               weight: 'bold'
             }
-          } // บังคับโหลด
+          }, // บังคับโหลด
+          annotation:{
+            annotations: {
+              annotationNow
+            }
+          }
         }
       }
     }
