@@ -1,6 +1,6 @@
 import express from 'express'
     import { ChartJSNodeCanvas } from 'chartjs-node-canvas'
-    import Chart from 'chart.js/auto'
+    import { Chart } from 'chart.js'
     import annotationPlugin from 'chartjs-plugin-annotation'
     import datalabels from 'chartjs-plugin-datalabels'
 
@@ -66,19 +66,31 @@ const annotation = {
             { x: 'July', y: null },
             { x: 'August', y: null },
             { x: 'September', y: 50 },
-            { x: 'October', y: null, label: '0' },
+            { x: 'October', y: null, },
             { x: 'November', y: null },
             { x: 'December', y: 70, label: 'Hold: 70' }
           ],
           borderColor: 'green',
           borderWidth: 3,
           spanGaps: true,
+          pointRadius: 0,
           fill: false,
           datalabels: {
-            display: ctx => ctx.raw && ctx.raw.label != null,
-            formatter: value => value.label || '',
+            display: (context) => {
+          const index = context.dataIndex;
+          const value = context.dataset.data[index];
+          const min = Math.min.apply(null, context.dataset.data);
+          const max = Math.max.apply(null, context.dataset.data);
+          return (
+            index == 0 ||
+            index == context.dataset.data.length - 1 ||
+            value == min ||
+            value == max
+          );
+        },
+            formatter: value => value.label  || '',
             align: 'top',
-            backgroundColor: 'black',
+            backgroundColor: 'back',
             borderRadius: 4,
             color: 'white',
             font: {
@@ -108,11 +120,16 @@ const annotation = {
             }
           },
           annotation: {
-            annotations: {
-           
-            }
+            annotations:{
+              box1: {
+                type: 'box',
+                xMin: 1,
+                xMax: 2,
+                backgroundColor: "red"
+              }
+            }   
           }
-        }
+        } 
       }
     }
     app.get('/', (req, res) => {
@@ -129,7 +146,7 @@ const annotation = {
         res.status(500).send('Failed to generate chart')
       }
     })
-
+console.log(chartConfig)
     // 🚀 Start server
     app.listen(port, () => {
       console.log(`🎯 Chart API ready at http://localhost:${port}/chart`)
