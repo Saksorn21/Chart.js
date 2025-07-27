@@ -1,4 +1,4 @@
-={})    import express from 'express'
+import express from 'express'
     import { ChartJSNodeCanvas } from 'chartjs-node-canvas'
     import Chart from 'chart.js/auto'
     import annotationPlugin from 'chartjs-plugin-annotation'
