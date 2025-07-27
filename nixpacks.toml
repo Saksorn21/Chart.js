@@ -5,4 +5,4 @@ nixPkgs = ["nodejs", "fontconfig"]
 cmds = ["npm install"]
 
 [phases.start]
-cmd = "npm start"
+cmds = ["npm start"]
