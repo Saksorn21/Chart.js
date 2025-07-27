@@ -22,7 +22,7 @@ import express from 'express'
     })
 const title = {
   display: true,
-  text: 'chart',
+  text: 'nvda',
   font: { size: 20, weight: 'bold' }
 }
 const target =  {
@@ -35,7 +35,7 @@ const target =  {
       display: true,
       content: "Target",
       position: "end",
-      backgroundColor: rgba(255,99,132,0.7),
+      backgroundColor: "rgba(255,99,132,0.7)",
       color: "white"
         }
       }
@@ -89,7 +89,6 @@ const annotation = {
         }]
       },
       options: {
-        legend: { display: false },
         scales: {
           x: {
             grid: {
@@ -100,6 +99,7 @@ const annotation = {
         responsive: false,
         plugins: {
           title,
+          legend: { display: false},
           datalabels: {
             font: {
               family: 'sans-serif',
@@ -109,7 +109,7 @@ const annotation = {
           },
           annotation: {
             annotations: {
-           target
+           
             }
           }
         }
