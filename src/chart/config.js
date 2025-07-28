@@ -1,14 +1,14 @@
 import getStockData from '../cache.js'
-export default async function configChart() {
+export default async function configChart(symbol, ranges, interval) {
 
-  const data = await getStockData("EOSE", "5d", "5m")
+  const data = await getStockData(symbol, ranges, interval)
 
   const shortName = data.shortName ?? "N/A";
   const timestamps = data.timestamp ?? [];
   const closes = data.close ?? []
   const closePrice = data.closePrice
-  const range = data.range;
-  const dataGranularity = data.dataGranularity;
+  const range = data.range ?? '1d'
+  const dataGranularity = data.dataGranularity ?? '5m'
 
   // แปลง timestamp เป็นวันที่แบบไทย
   const monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
@@ -18,7 +18,7 @@ export default async function configChart() {
   const labels = timestamps.map(ts => {
     const d = new Date(ts * 1000);
     const day = d.getDate();
-    const month = monthNames[d.getMonth()];
+    const month = d.getMonth()
     const current = `${day} ${month}`;
 
     if (current !== prevDay) {
@@ -80,6 +80,38 @@ export default async function configChart() {
       position: 'center'
     }
   };
+  const boxData = {
+    label: 'Buy Signal',
+    data: [
+      { x: timeCheck[timeCheck.length -1], y: closePrice },
+      { x: 'December', y: 7, label: 'Hold: 70' }
+    ],
+    borderColor: 'green',
+    borderWidth: 3,
+    spanGaps: true,
+    pointRadius: 0,
+    fill: false,
+    datalabels: {
+      display: (context) => {
+        const index = context.dataIndex;
+        const value = context.dataset.data[index];
+        const min = Math.min.apply(null, context.dataset.data);
+        const max = Math.max.apply(null, context.dataset.data);
+        return (
+          index == 0 ||
+          index == context.dataset.data.length - 1 ||
+          value == min ||
+          value == max
+        );
+      },
+      formatter: value => value.label || '',
+      align: 'top',
+      backgroundColor: 'black',
+      borderRadius: 4,
+      color: 'white',
+      font: { weight: 'bold', size: 12 }
+    }
+    }
   const chartConfig = {
     type: "line",
     data: {
@@ -97,38 +129,7 @@ export default async function configChart() {
           tension: 0.2,
           datalabels: {
             display: false}},
-        {
-        label: 'Buy Signal',
-        data: [
-          { x: timeCheck[timeCheck.length -1], y: closePrice },
-          { x: 'December', y: 7, label: 'Hold: 70' }
-        ],
-        borderColor: 'green',
-        borderWidth: 3,
-        spanGaps: true,
-        pointRadius: 0,
-        fill: false,
-        datalabels: {
-          display: (context) => {
-            const index = context.dataIndex;
-            const value = context.dataset.data[index];
-            const min = Math.min.apply(null, context.dataset.data);
-            const max = Math.max.apply(null, context.dataset.data);
-            return (
-              index == 0 ||
-              index == context.dataset.data.length - 1 ||
-              value == min ||
-              value == max
-            );
-          },
-          formatter: value => value.label || '',
-          align: 'top',
-          backgroundColor: 'black',
-          borderRadius: 4,
-          color: 'white',
-          font: { weight: 'bold', size: 12 }
-        }
-      }]
+]
     },
     options: {
       // ... your options, including plugins.annotation and datalabels
@@ -138,6 +139,7 @@ export default async function configChart() {
             grid: { display: false },
             ticks: {
               autoSkip: autoSkip,
+              fontFamily: "Arial",
               fontSize: 9,
               fontStyle: "bold"}
           },

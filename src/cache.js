@@ -22,8 +22,8 @@ export default async function getStockData(symbol, range = '1d', interval = '2m'
   const slimData = {
     symbol,
     shortName: data.chart.result[0].meta.shortName,
-    range: data.chart.result[0].meta.range,
-    dataGranularity: data.chart.result[0].meta.dataGranularity,
+    range: range,
+    dataGranularity: interval,
     timestamp: data.chart.result[0].timestamp,
     close: data.chart.result[0].indicators.quote[0].close,
     closePrice: data.chart.result[0].indicators.quote[0].close[data.chart.result[0].indicators.quote[0].close.length - 1],

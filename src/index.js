@@ -4,9 +4,11 @@ import configChart from './chart/config.js'
 const app = express()
   const port = process.env.PORT || 3000
 //ใน Express route ของคุณ:
-app.get("/test/chart", async (req, res) => {
+app.get("/chart/:symbol/:range-:interval.png", async (req, res) => {
   try {
-    const imageBuffer = await generateChart(await configChart());
+    const { symbol, range, interval } = req.params
+    const config = await configChart(symbol, range, interval)
+    const imageBuffer = await generateChart(config);
     res.set("Content-Type", "image/png");
     res.send(imageBuffer);
   } catch (err) {
