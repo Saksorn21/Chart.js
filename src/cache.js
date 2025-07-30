@@ -25,6 +25,10 @@ export default async function getStockData(symbol, range = '1d', interval = '2m'
     range: range,
     dataGranularity: interval,
     timestamp: data.chart.result[0].timestamp,
+    regularMarketTime: data.chart.result[0].meta.regularMarketTime,
+    marketStartTime: data.chart.result[0].meta.currentTradingPeriod.regular.start,
+    marketCloseTime: data.chart.result[0].meta.currentTradingPeriod.regular.end,
+    volume: data.chart.result[0].indicators.quote[0].volume,
     close: data.chart.result[0].indicators.quote[0].close,
     closePrice: data.chart.result[0].indicators.quote[0].close[data.chart.result[0].indicators.quote[0].close.length - 1],
     

@@ -20,6 +20,22 @@ app.get("/chart/:symbol/:range-:interval.png", async (req, res) => {
       );
   }
 });
+app.get("/test:range", async (req, res) => {
+  try {
+    const { range } = req.params
+    const config = await configChart('NVDA', range, '2m')
+    const imageBuffer = await generateChart(config);
+    res.set("Content-Type", "image/png");
+    res.send(imageBuffer);
+  } catch (err) {
+    console.error("🛑 Chart Error:", err);
+    res
+      .status(500)
+      .send(
+        `Failed to generate chart\nError details: ${err.message}\nStack: ${err.stack}`,
+      );
+  }
+});
 // 🚀 Start server
 app.listen(port, () => {
   console.log(`🎯 Chart API ready at http://localhost:${port}/chart`)
